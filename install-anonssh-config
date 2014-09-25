@@ -1,0 +1,58 @@
+#!/usr/bin/python -SB
+
+import re
+import os
+import sys
+
+default_ident = '    '
+
+
+def indent_style(config):
+	if re.findall(re.compile(r'^\t', re.M), config):
+		return '\t'
+	elif re.findall(re.compile(r'^    ', re.M), config):
+		return '    '
+	elif re.findall(re.compile(r'^  ', re.M), config):
+		return '  '
+	elif re.findall(re.compile(r'^ ', re.M), config):
+		return ' '
+	return default_indent
+
+
+def main():
+	ssh_config_fname = os.path.join(os.environ["HOME"], ".ssh", "config")
+
+	try:
+		with open(ssh_config_fname, "rb") as f:
+			old = f.read()
+	except IOError:
+		old = ""
+	
+	if "Host github.com" in old:
+		print >>sys.stderr, "Host github.com is already configured in %s" % (ssh_config_fname,)
+		return
+	else:
+		indent = indent_style(old)
+
+	key_github = os.path.join(os.path.abspath(os.path.dirname(__file__)), "anonssh_keys", "id_rsa.github")
+
+	extra = """\
+# Added by anonssh-git
+Host github.com
+{indent}IdentityFile {key_github}
+{indent}IdentitiesOnly yes
+""".format(indent=indent, key_github=key_github)
+
+	if old:
+		extra = "\n" + extra
+		if not old.endswith("\n"):
+			extra = "\n" + extra
+
+	with open(ssh_config_fname, "wb") as f:
+		f.write(old + extra)
+
+	print "Configured anonssh key in %s" % (ssh_config_fname,)
+
+
+if __name__ == '__main__':
+	main()

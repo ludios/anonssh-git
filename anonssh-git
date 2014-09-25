@@ -1,0 +1,20 @@
+#!/usr/bin/python -SB
+
+import sys
+import subprocess
+
+def https_to_ssh(s):
+	if s.startswith("https://github.com/"):
+		return s.replace("https://github.com/", "git@github.com:", 1)
+	return s
+
+def main():
+	if sys.argv[1:2] == ["clone"]:
+		fixed_args = map(https_to_ssh, sys.argv[1:])
+		p = subprocess.Popen(["git"] + fixed_args)
+	else:
+		p = subprocess.Popen(["git"] + sys.argv[1:])
+	p.wait()
+
+if __name__ == '__main__':
+	main()
