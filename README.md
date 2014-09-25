@@ -8,7 +8,7 @@ that does not let rogue or compromised certificate authorities MITM
 your git clone/fetch.
 
 anonssh uses a publicly-known "private" key registered to
-https://github.com/anonssh-keys, and the key (like any other registed to GitHub)
+https://github.com/anonssh-keys, and the key (like any other registered to GitHub)
 can be used to clone any repo.
 
 To configure `~/.ssh/config` and `~/.ssh/known_hosts` to use this key, run
