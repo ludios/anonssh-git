@@ -7,6 +7,10 @@ import distutils.dir_util
 
 default_indent = '    '
 
+ssh_config_fname = os.path.join(os.environ["HOME"], ".ssh", "config")
+keys_dest_dir = os.path.join(os.environ["HOME"], ".ssh", "anonssh_keys")
+github_key_fname = "~/.ssh/anonssh_keys/id_rsa.github"
+
 
 def indent_style(config):
 	if re.findall(re.compile(r'^\t', re.M), config):
@@ -21,10 +25,7 @@ def indent_style(config):
 
 
 def main():
-	ssh_config_fname = os.path.join(os.environ["HOME"], ".ssh", "config")
 	keys_src_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), "anonssh_keys")
-	keys_dest_dir = os.path.join(os.environ["HOME"], ".ssh", "anonssh_keys")
-	github_key_fname = "~/.ssh/anonssh_keys/id_rsa.github"
 
 	try:
 		with open(ssh_config_fname, "rb") as f:
