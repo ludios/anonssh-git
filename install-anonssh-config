@@ -42,6 +42,8 @@ def install_anonssh_keys():
 	keys_src_dir = os.path.join(SELF, "anonssh_keys")
 	distutils.dir_util.copy_tree(keys_src_dir, keys_dest_dir)
 	for f in glob.glob(os.path.join(keys_dest_dir, "*")):
+		# Must chmod or else ssh will abort with
+		# WARNING: UNPROTECTED PRIVATE KEY FILE!
 		os.chmod(f, 0600)
 	print "Installed %s" % (keys_dest_dir,)
 
